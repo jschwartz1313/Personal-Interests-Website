@@ -1,0 +1,10 @@
+# MacOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Backup files
+*.json
+!package.json
