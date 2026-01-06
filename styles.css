@@ -63,9 +63,34 @@ nav h1 {
     border-radius: 5px;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a.active {
     color: var(--secondary-color);
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-secondary {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.75rem 2rem 0;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-secondary a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    padding: 0.25rem 0;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-secondary a:hover {
+    color: white;
+    border-bottom-color: var(--secondary-color);
 }
 
 #hero {
@@ -182,6 +207,22 @@ nav h1 {
     box-shadow: var(--card-shadow);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
+    position: relative;
+}
+
+.custom-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .card:hover {
@@ -317,6 +358,12 @@ nav h1 {
 .expandable-card {
     cursor: pointer;
     text-align: left;
+    position: relative;
+}
+
+.expandable-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .card-content {

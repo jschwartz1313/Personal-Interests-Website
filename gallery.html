@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - My Interests</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="gallery.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>🖼️ Gallery</h1>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="stats.html">Stats</a></li>
+                <li><a href="gallery.html" class="active">Gallery</a></li>
+                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="add.html">Add Interest</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="gallery-container">
+        <section class="gallery-hero">
+            <h2>Visual Journey Through My Interests</h2>
+            <p>A collection of memorable moments and inspirations</p>
+        </section>
+
+        <!-- Filter Buttons -->
+        <section class="gallery-filters">
+            <button class="filter-btn active" data-category="all">All</button>
+            <button class="filter-btn" data-category="fandoms">Fandoms</button>
+            <button class="filter-btn" data-category="movies">Movies & TV</button>
+            <button class="filter-btn" data-category="sports">Sports</button>
+            <button class="filter-btn" data-category="tech">Technology</button>
+        </section>
+
+        <!-- Gallery Grid -->
+        <section class="gallery-grid" id="gallery-grid">
+            <!-- Gallery items will be populated by JS -->
+        </section>
+    </main>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-image" id="lightbox-image" src="" alt="">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 My Interests | Built with passion</p>
+    </footer>
+
+    <script src="gallery.js"></script>
+</body>
+</html>

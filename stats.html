@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stats Dashboard - My Interests</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="stats.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>📊 Stats Dashboard</h1>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="stats.html" class="active">Stats</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="add.html">Add Interest</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="stats-container">
+        <section class="stats-hero">
+            <h2>Your Interest Journey</h2>
+            <p>Insights and analytics about your passions</p>
+        </section>
+
+        <!-- Overview Cards -->
+        <section class="overview-section">
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-info">
+                    <h3 id="total-interests">0</h3>
+                    <p>Total Interests</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💯</div>
+                <div class="stat-info">
+                    <h3 id="total-rated">0</h3>
+                    <p>Rated Items</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📝</div>
+                <div class="stat-info">
+                    <h3 id="total-notes">0</h3>
+                    <p>With Notes</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-info">
+                    <h3 id="avg-rating">0</h3>
+                    <p>Avg Rating</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Category Breakdown -->
+        <section class="category-section">
+            <h2>Category Breakdown</h2>
+            <div class="category-grid" id="category-grid">
+                <!-- Will be populated by JS -->
+            </div>
+        </section>
+
+        <!-- Top Rated -->
+        <section class="top-rated-section">
+            <h2>🌟 Your Top Rated Interests</h2>
+            <div class="top-rated-grid" id="top-rated-grid">
+                <!-- Will be populated by JS -->
+            </div>
+        </section>
+
+        <!-- Rating Distribution -->
+        <section class="distribution-section">
+            <h2>Rating Distribution</h2>
+            <div class="rating-chart">
+                <div class="bar-chart" id="rating-chart">
+                    <!-- Will be populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity Timeline -->
+        <section class="activity-section">
+            <h2>Recent Activity</h2>
+            <div class="activity-timeline" id="activity-timeline">
+                <!-- Will be populated by JS -->
+            </div>
+        </section>
+
+        <!-- Fun Facts -->
+        <section class="fun-facts-section">
+            <h2>🎉 Fun Facts</h2>
+            <div class="fun-facts-grid" id="fun-facts">
+                <!-- Will be populated by JS -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 My Interests | Built with passion</p>
+    </footer>
+
+    <script src="stats.js"></script>
+</body>
+</html>

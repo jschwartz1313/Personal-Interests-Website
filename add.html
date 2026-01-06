@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Interest - My Interests</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="add.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>📝 Add New Interest</h1>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="stats.html">Stats</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="add.html" class="active">Add Interest</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="add-container">
+        <section class="form-section">
+            <div class="form-header">
+                <h2>Create Your Interest</h2>
+                <p>Fill in the details to add a new interest to your collection</p>
+            </div>
+
+            <form id="add-interest-form">
+                <!-- Basic Info -->
+                <div class="form-group">
+                    <label for="interest-title">Title *</label>
+                    <input type="text" id="interest-title" required placeholder="e.g., The Matrix">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="interest-category">Category *</label>
+                        <select id="interest-category" required>
+                            <option value="">Select category...</option>
+                            <option value="fandoms">Fandoms</option>
+                            <option value="movies">Movies & TV</option>
+                            <option value="crafts">Crafts & Building</option>
+                            <option value="sports">Sports</option>
+                            <option value="energy">Energy & Sustainability</option>
+                            <option value="society">Society & Culture</option>
+                            <option value="technology">Technology & Innovation</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="interest-icon">Icon/Emoji</label>
+                        <input type="text" id="interest-icon" placeholder="🎬" maxlength="2">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="interest-intro">Short Introduction *</label>
+                    <textarea id="interest-intro" required rows="2" placeholder="A one-line description of what this interest means to you..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="interest-image">Image URL (optional)</label>
+                    <input type="url" id="interest-image" placeholder="https://example.com/image.jpg">
+                    <small>Paste a URL to an image or upload one below</small>
+                </div>
+
+                <!-- Detailed Sections -->
+                <div class="details-section">
+                    <h3>Detailed Information</h3>
+                    <p class="help-text">Add multiple sections to describe different aspects</p>
+
+                    <div id="sections-container">
+                        <div class="section-item">
+                            <input type="text" class="section-title" placeholder="Section Title (e.g., Why I Love It)">
+                            <textarea class="section-content" rows="3" placeholder="Detailed content for this section..."></textarea>
+                            <button type="button" class="remove-section-btn" onclick="removeSection(this)">Remove</button>
+                        </div>
+                    </div>
+
+                    <button type="button" class="add-section-btn" onclick="addSection()">+ Add Another Section</button>
+                </div>
+
+                <!-- Media Items -->
+                <div class="media-section">
+                    <h3>Related Media (Optional)</h3>
+                    <p class="help-text">Add movies, books, games, or other related items</p>
+
+                    <div id="media-container">
+                        <!-- Media items will be added here -->
+                    </div>
+
+                    <button type="button" class="add-media-btn" onclick="addMediaItem()">+ Add Media Item</button>
+                </div>
+
+                <!-- Links -->
+                <div class="links-section">
+                    <h3>Quick Links (Optional)</h3>
+                    <div id="links-container">
+                        <div class="link-item">
+                            <input type="text" class="link-label" placeholder="Label (e.g., Wikipedia)">
+                            <input type="url" class="link-url" placeholder="https://...">
+                            <button type="button" class="remove-link-btn" onclick="removeLink(this)">×</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-link-btn" onclick="addLink()">+ Add Link</button>
+                </div>
+
+                <!-- Submit -->
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Create Interest</button>
+                    <button type="button" class="preview-btn" onclick="previewInterest()">Preview</button>
+                    <button type="reset" class="reset-btn">Clear Form</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Preview Section -->
+        <section class="preview-section" id="preview-section">
+            <h3>Live Preview</h3>
+            <div id="preview-content" class="card expandable-card expanded">
+                <div class="card-icon">🎯</div>
+                <h3>Your Interest Title</h3>
+                <div class="card-content">
+                    <p class="card-intro">Your introduction will appear here...</p>
+                    <div class="card-details">
+                        <p>Fill in the form to see a preview of your interest card!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 My Interests | Built with passion</p>
+    </footer>
+
+    <script src="add.js"></script>
+</body>
+</html>

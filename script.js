@@ -53,6 +53,12 @@ class StarRating {
     }
 
     init() {
+        // Check if required elements exist
+        if (!this.stars || this.stars.length === 0 || !this.ratingText) {
+            console.warn('StarRating: Missing required elements for card', this.cardId);
+            return;
+        }
+
         // Load saved rating
         const savedRating = StorageManager.getRating(this.cardId);
         if (savedRating) {
@@ -75,9 +81,11 @@ class StarRating {
         });
 
         const ratingContainer = this.card.querySelector('.card-rating');
-        ratingContainer.addEventListener('mouseleave', () => {
-            this.highlightStars(this.currentRating);
-        });
+        if (ratingContainer) {
+            ratingContainer.addEventListener('mouseleave', () => {
+                this.highlightStars(this.currentRating);
+            });
+        }
     }
 
     setRating(value, save = true) {
@@ -197,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initStorageManager();
 
     // Show storage status after a delay to allow IndexedDB to initialize
-    setTimeout(() => showStorageStatus(), 1000);
+    // setTimeout(() => showStorageStatus(), 1000);
 
     // Animate cards on load
     const cards = document.querySelectorAll('.card');
@@ -214,23 +222,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }, index * 100);
     });
 
-    // Smooth scrolling for navigation
+    // Smooth scrolling for navigation (only for anchor links on same page)
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault();
             const targetId = link.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
 
-            if (targetSection) {
-                const headerOffset = 80;
-                const elementPosition = targetSection.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            // Only prevent default and smooth scroll for anchor links (starting with #)
+            if (targetId && targetId.startsWith('#')) {
+                e.preventDefault();
+                const targetSection = document.querySelector(targetId);
 
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
+                if (targetSection) {
+                    const headerOffset = 80;
+                    const elementPosition = targetSection.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
             }
+            // For regular page links (stats.html, etc.), let the browser handle it normally
         });
     });
 
@@ -251,24 +264,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Expandable cards functionality
     const expandableCards = document.querySelectorAll('.expandable-card');
+    console.log('Found expandable cards:', expandableCards.length);
 
-    expandableCards.forEach(card => {
-        card.addEventListener('click', (e) => {
-            // Don't collapse if clicking on interactive elements
-            if (e.target.closest('.star') ||
+    expandableCards.forEach((card, index) => {
+        console.log(`Setting up card ${index}:`, card.querySelector('h3')?.textContent);
+
+        // Add click handler to card
+        card.addEventListener('click', function(e) {
+            // Don't toggle if clicking on interactive elements
+            if (e.target.tagName === 'A' ||
+                e.target.tagName === 'INPUT' ||
+                e.target.tagName === 'BUTTON' ||
+                e.target.tagName === 'TEXTAREA' ||
+                e.target.closest('.star') ||
                 e.target.closest('.notes-input') ||
                 e.target.closest('.save-notes-btn') ||
-                e.target.closest('.external-link')) {
+                e.target.closest('.external-link') ||
+                e.target.closest('.watched-checkbox') ||
+                e.target.closest('.media-item a')) {
                 return;
             }
 
-            card.classList.toggle('expanded');
-        });
+            console.log('Toggling card:', this.querySelector('h3')?.textContent);
+            this.classList.toggle('expanded');
+        }, false);
 
-        // Initialize rating system if card has ID
+        // Initialize rating system if card has ID and rating elements
         if (card.dataset.cardId) {
-            new StarRating(card);
-            new PersonalNotes(card);
+            // Only init StarRating if the card has rating elements
+            if (card.querySelector('.card-rating')) {
+                new StarRating(card);
+            }
+            // Only init PersonalNotes if the card has notes elements
+            if (card.querySelector('.personal-notes')) {
+                new PersonalNotes(card);
+            }
         }
     });
 
