@@ -6,6 +6,7 @@
     <title>Stats Dashboard - My Interests</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="stats.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <header>
@@ -78,10 +79,16 @@
         <!-- Rating Distribution -->
         <section class="distribution-section">
             <h2>Rating Distribution</h2>
-            <div class="rating-chart">
-                <div class="bar-chart" id="rating-chart">
-                    <!-- Will be populated by JS -->
-                </div>
+            <div class="chart-container">
+                <canvas id="rating-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Category Chart -->
+        <section class="category-chart-section">
+            <h2>Interests by Category</h2>
+            <div class="chart-container">
+                <canvas id="category-chart"></canvas>
             </div>
         </section>
 

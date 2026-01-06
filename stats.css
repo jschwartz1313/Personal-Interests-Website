@@ -302,3 +302,28 @@
         padding: 1.5rem;
     }
 }
+
+/* Chart Containers */
+.chart-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.chart-container canvas {
+    max-height: 400px;
+}
+
+.category-chart-section {
+    margin-bottom: 3rem;
+}
+
+.category-chart-section h2 {
+    text-align: center;
+    color: var(--secondary-color);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+}

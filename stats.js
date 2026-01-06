@@ -172,25 +172,126 @@ function updateTopRated(stats) {
 }
 
 function updateRatingDistribution(stats) {
-    const chart = document.getElementById('rating-chart');
-    chart.innerHTML = '';
+    const canvas = document.getElementById('rating-chart');
+    if (!canvas) return;
 
-    const maxCount = Math.max(...Object.values(stats.ratingDistribution), 1);
+    const ctx = canvas.getContext('2d');
 
-    for (let rating = 5; rating >= 1; rating--) {
-        const count = stats.ratingDistribution[rating];
-        const percentage = (count / maxCount) * 100;
-
-        const barItem = document.createElement('div');
-        barItem.className = 'bar-item';
-        barItem.innerHTML = `
-            <div class="bar-label">${'⭐'.repeat(rating)}</div>
-            <div class="bar-container">
-                <div class="bar-fill" style="width: ${percentage}%">${count}</div>
-            </div>
-        `;
-        chart.appendChild(barItem);
+    // Destroy existing chart if it exists
+    if (window.ratingChart) {
+        window.ratingChart.destroy();
     }
+
+    window.ratingChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+            datasets: [{
+                label: 'Number of Interests',
+                data: [
+                    stats.ratingDistribution[1],
+                    stats.ratingDistribution[2],
+                    stats.ratingDistribution[3],
+                    stats.ratingDistribution[4],
+                    stats.ratingDistribution[5]
+                ],
+                backgroundColor: [
+                    'rgba(231, 76, 60, 0.8)',
+                    'rgba(230, 126, 34, 0.8)',
+                    'rgba(241, 196, 15, 0.8)',
+                    'rgba(52, 152, 219, 0.8)',
+                    'rgba(46, 204, 113, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(231, 76, 60, 1)',
+                    'rgba(230, 126, 34, 1)',
+                    'rgba(241, 196, 15, 1)',
+                    'rgba(52, 152, 219, 1)',
+                    'rgba(46, 204, 113, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: 'How You Rate Your Interests',
+                    font: {
+                        size: 16
+                    }
+                }
+            }
+        }
+    });
+
+    // Create category chart
+    createCategoryChart(stats);
+}
+
+function createCategoryChart(stats) {
+    const canvas = document.getElementById('category-chart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+
+    // Destroy existing chart if it exists
+    if (window.categoryChart) {
+        window.categoryChart.destroy();
+    }
+
+    const categories = Object.keys(stats.categories);
+    const counts = Object.values(stats.categories);
+
+    window.categoryChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: categories,
+            datasets: [{
+                data: counts,
+                backgroundColor: [
+                    'rgba(231, 76, 60, 0.8)',
+                    'rgba(155, 89, 182, 0.8)',
+                    'rgba(243, 156, 18, 0.8)',
+                    'rgba(39, 174, 96, 0.8)',
+                    'rgba(241, 196, 15, 0.8)',
+                    'rgba(52, 152, 219, 0.8)',
+                    'rgba(26, 188, 156, 0.8)'
+                ],
+                borderColor: '#fff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: 'Distribution by Category',
+                    font: {
+                        size: 16
+                    }
+                }
+            }
+        }
+    });
 }
 
 function updateActivity(stats) {
