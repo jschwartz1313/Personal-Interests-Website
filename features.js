@@ -35,20 +35,40 @@ function initializeSearch() {
 }
 
 function performSearch(query, resultsContainer) {
-    const allCards = document.querySelectorAll('.expandable-card');
+    // Search both regular cards and expandable cards
+    const allCards = document.querySelectorAll('.card, .expandable-card');
     const results = [];
+    const seenTitles = new Set(); // Prevent duplicates
 
     allCards.forEach(card => {
+        // Get all text content from the card
         const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
-        const intro = card.querySelector('.card-intro')?.textContent.toLowerCase() || '';
+        const intro = card.querySelector('.card-intro, p')?.textContent.toLowerCase() || '';
         const details = card.querySelector('.card-details')?.textContent.toLowerCase() || '';
         const notes = card.querySelector('.notes-input')?.value.toLowerCase() || '';
 
-        if (title.includes(query) || intro.includes(query) || details.includes(query) || notes.includes(query)) {
+        // Also search in media items, links, and all paragraph text
+        const allText = card.textContent.toLowerCase();
+
+        // Check if query matches anywhere
+        if (title.includes(query) ||
+            intro.includes(query) ||
+            details.includes(query) ||
+            notes.includes(query) ||
+            allText.includes(query)) {
+
+            const cardTitle = card.querySelector('h3')?.textContent || 'Untitled';
+
+            // Skip duplicates
+            if (seenTitles.has(cardTitle)) return;
+            seenTitles.add(cardTitle);
+
             const category = getCardCategory(card);
+            const snippet = getSearchSnippet(card, query);
+
             results.push({
-                title: card.querySelector('h3')?.textContent,
-                intro: card.querySelector('.card-intro')?.textContent,
+                title: cardTitle,
+                intro: snippet,
                 category: category,
                 element: card
             });
@@ -58,42 +78,99 @@ function performSearch(query, resultsContainer) {
     displaySearchResults(results, resultsContainer, query);
 }
 
+function getSearchSnippet(card, query) {
+    // Try to find the most relevant snippet containing the search term
+    const intro = card.querySelector('.card-intro, p')?.textContent || '';
+    if (intro.toLowerCase().includes(query)) {
+        return intro.substring(0, 100) + (intro.length > 100 ? '...' : '');
+    }
+
+    const details = card.querySelector('.card-details')?.textContent || '';
+    if (details.toLowerCase().includes(query)) {
+        const index = details.toLowerCase().indexOf(query);
+        const start = Math.max(0, index - 40);
+        const end = Math.min(details.length, index + 60);
+        return (start > 0 ? '...' : '') +
+               details.substring(start, end) +
+               (end < details.length ? '...' : '');
+    }
+
+    return intro.substring(0, 100) + (intro.length > 100 ? '...' : '');
+}
+
 function getCardCategory(card) {
     const section = card.closest('.content-section, .category-section');
-    if (!section) return 'Unknown';
+    if (!section) return 'Other';
 
-    const sectionTitle = section.querySelector('h2')?.textContent || 'Unknown';
-    return sectionTitle;
+    // Try to get the section title
+    const sectionTitle = section.querySelector('h2')?.textContent;
+    if (sectionTitle) {
+        return sectionTitle.replace(/[^\w\s&]/g, '').trim(); // Remove emojis, keep clean text
+    }
+
+    // Fallback: try to get from section ID
+    if (section.id) {
+        return section.id.split('-').map(word =>
+            word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' ');
+    }
+
+    return 'Other';
 }
 
 function displaySearchResults(results, container, query) {
     container.innerHTML = '';
 
     if (results.length === 0) {
-        container.innerHTML = '<div class="no-results">No interests found matching "' + query + '"</div>';
+        container.innerHTML = `
+            <div class="no-results">
+                <p>No interests found matching "${query}"</p>
+                <small>Try searching for: fandoms, podcasts, crafts, sports, etc.</small>
+            </div>
+        `;
         container.classList.remove('hidden');
         return;
     }
 
+    // Add result count header
+    const header = document.createElement('div');
+    header.className = 'search-results-header';
+    header.textContent = `Found ${results.length} result${results.length !== 1 ? 's' : ''}`;
+    container.appendChild(header);
+
     results.forEach(result => {
         const item = document.createElement('div');
         item.className = 'search-result-item';
+
+        // Highlight the query in the title
+        const highlightedTitle = highlightMatch(result.title, query);
+
         item.innerHTML = `
-            <div class="search-result-title">${result.title}</div>
+            <div class="search-result-title">${highlightedTitle}</div>
+            <div class="search-result-snippet">${result.intro}</div>
             <div class="search-result-category">${result.category}</div>
         `;
 
         item.addEventListener('click', () => {
             // Scroll to and expand the card
             result.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            result.element.classList.add('expanded');
 
-            // Highlight briefly
-            result.element.style.boxShadow = '0 0 0 4px rgba(52, 152, 219, 0.5)';
+            // Make sure card is expanded
+            if (!result.element.classList.contains('expanded')) {
+                result.element.classList.add('expanded');
+            }
+
+            // Highlight with animation
+            result.element.style.transition = 'box-shadow 0.3s ease';
+            result.element.style.boxShadow = '0 0 0 4px rgba(52, 152, 219, 0.7)';
             setTimeout(() => {
-                result.element.style.boxShadow = '';
-            }, 2000);
+                result.element.style.boxShadow = '0 0 0 4px rgba(52, 152, 219, 0)';
+                setTimeout(() => {
+                    result.element.style.boxShadow = '';
+                }, 300);
+            }, 1700);
 
+            // Clear search
             container.classList.add('hidden');
             document.getElementById('search-input').value = '';
         });
@@ -102,6 +179,19 @@ function displaySearchResults(results, container, query) {
     });
 
     container.classList.remove('hidden');
+}
+
+function highlightMatch(text, query) {
+    if (!text || !query) return text;
+
+    const index = text.toLowerCase().indexOf(query.toLowerCase());
+    if (index === -1) return text;
+
+    const before = text.substring(0, index);
+    const match = text.substring(index, index + query.length);
+    const after = text.substring(index + query.length);
+
+    return `${before}<mark>${match}</mark>${after}`;
 }
 
 // ========================================
